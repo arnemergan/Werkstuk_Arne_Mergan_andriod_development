@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Werkstuk_Arne_Mergan</string>
+    <string name="menu_settings">instelligen</string>
+    <string name="search">search</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".MainListViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Bron: https://developer.android.com/reference/android/widget/ListView -->
+    <ListView
+        android:id="@+id/main_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
