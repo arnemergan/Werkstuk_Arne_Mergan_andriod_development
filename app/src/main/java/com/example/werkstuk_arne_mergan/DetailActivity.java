@@ -7,15 +7,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        androidx.appcompat.widget.Toolbar maintoolbar = findViewById(R.id.main_bar);
+        setContentView(R.layout.activity_detail);
+        androidx.appcompat.widget.Toolbar maintoolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(maintoolbar);
     }
 
