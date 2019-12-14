@@ -8,13 +8,13 @@
 
     <include
         android:id="@+id/main_bar"
-        layout="@layout/main_toolbar" />
+    layout="@layout/main_toolbar" />
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.example.werkstuk_arne_mergan.MainListViewFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:name="com.example.werkstuk_arne_mergan.MainRecyclerViewFragment"
+        android:layout_width="match_parent"
+        android:layout_height="@+id/main_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

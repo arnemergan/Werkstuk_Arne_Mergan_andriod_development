@@ -1,6 +1,7 @@
 package com.example.werkstuk_arne_mergan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        androidx.appcompat.widget.Toolbar maintoolbar = findViewById(R.id.main_bar);
-        setSupportActionBar(maintoolbar);
+        androidx.appcompat.widget.Toolbar mlt = findViewById(R.id.main_bar);
+        setSupportActionBar(mlt);
     }
 
     @Override
