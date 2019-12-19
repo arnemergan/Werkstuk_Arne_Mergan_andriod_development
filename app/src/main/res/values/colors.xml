@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#f3f3f3</color>
     <color name="colorAccent">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="earth">#0066ff</color>
+    <color name="venus">#ffff1a</color>
+    <color name="merc">#ff33ff</color>
+    <color name="mars">#ff3300</color>
+    <color name="any">#999999</color>
     <color name="colorWarning">#ffd400</color>
     <color name="colorNoWarning">#3bccff</color>
     <color name="colorBackgroundToolbar">#f3f3f3</color>

@@ -3,7 +3,7 @@ package com.example.werkstuk_arne_mergan.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class Kilometers {
+public class Kilometers {
     @SerializedName("estimated_diameter_min")
     @Expose
     private Double estimatedDiameterMin;

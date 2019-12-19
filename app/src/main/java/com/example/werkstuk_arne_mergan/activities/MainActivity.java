@@ -1,14 +1,14 @@
-package com.example.werkstuk_arne_mergan;
+package com.example.werkstuk_arne_mergan.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import com.example.werkstuk_arne_mergan.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
             //TODO action settings;
-            Intent settings_intent = new Intent(this,SettingsActivity.class);
+            Intent settings_intent = new Intent(this, SettingsActivity.class);
             startActivity(settings_intent);
             return true;
         }

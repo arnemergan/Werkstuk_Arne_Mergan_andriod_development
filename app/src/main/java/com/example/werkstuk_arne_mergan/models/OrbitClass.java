@@ -3,7 +3,7 @@ package com.example.werkstuk_arne_mergan.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class OrbitClass {
+public class OrbitClass {
     @SerializedName("orbit_class_type")
     @Expose
     private String orbitClassType;

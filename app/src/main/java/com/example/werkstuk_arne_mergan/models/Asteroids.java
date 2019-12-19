@@ -3,6 +3,8 @@ package com.example.werkstuk_arne_mergan.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Asteroids {
     @SerializedName("links")
     @Expose
@@ -12,7 +14,7 @@ public class Asteroids {
     private Integer elementCount;
     @SerializedName("near_earth_objects")
     @Expose
-    private NearEarthObjects nearEarthObjects;
+    private List<Asteroid> nearEarthObjects;
 
     public Links getLinks() {
         return links;
@@ -30,11 +32,11 @@ public class Asteroids {
         this.elementCount = elementCount;
     }
 
-    public NearEarthObjects getNearEarthObjects() {
+    public List<Asteroid> getNearEarthObjects() {
         return nearEarthObjects;
     }
 
-    public void setNearEarthObjects(NearEarthObjects nearEarthObjects) {
+    public void setNearEarthObjects(List<Asteroid> nearEarthObjects) {
         this.nearEarthObjects = nearEarthObjects;
     }
 }

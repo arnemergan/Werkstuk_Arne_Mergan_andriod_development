@@ -1,10 +1,13 @@
 package com.example.werkstuk_arne_mergan.models;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class Asteroid {
     @SerializedName("links")
     @Expose

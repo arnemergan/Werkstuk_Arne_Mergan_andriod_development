@@ -1,4 +1,4 @@
-package com.example.werkstuk_arne_mergan;
+package com.example.werkstuk_arne_mergan.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.werkstuk_arne_mergan.R;
+import com.example.werkstuk_arne_mergan.activities.MainActivity;
 import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
+import com.example.werkstuk_arne_mergan.models.Asteroids;
 
 import java.util.List;
 
@@ -19,10 +22,18 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
     private List<Asteroid> asteroids;
     private OnItemClickListener listener;
 
-    public Main_Adapter(Context context, List<Asteroid> asteroids,OnItemClickListener listener) {
+    public Main_Adapter(Context context, List<Asteroid> asteroids, OnItemClickListener listener) {
         this.context = context;
         this.asteroids = asteroids;
         this.listener = listener;
+    }
+
+    public List<Asteroid> getAsteroids() {
+        return asteroids;
+    }
+
+    public void setAsteroids(List<Asteroid> asteroids) {
+        this.asteroids = asteroids;
     }
 
     @NonNull
@@ -37,7 +48,12 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
         Asteroid asteroid = asteroids.get(position);
         holder.bind(asteroid,listener);
         holder.tv_name.setText(asteroid.getName());
-        holder.tv_full_date.setText(asteroid.getCloseApproachData().toString());
+        String date = asteroid.getCloseApproachData().get(0).getCloseApproachDateFull();
+        if(date.isEmpty()){
+            holder.tv_full_date.setText(asteroid.getCloseApproachData().get(0).getCloseApproachDate());
+        }else{
+            holder.tv_full_date.setText(date);
+        }
     }
 
     @Override

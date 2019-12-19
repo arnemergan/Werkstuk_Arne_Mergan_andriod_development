@@ -21,6 +21,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="close_approach_data">Close approach data</string>
+    <string name="info">Info</string>
+    <string name="magnitude">Magnitude:</string>
+    <string name="diameter">Diameter:</string>
+    <string name="hazardous">Hazardous:</string>
+    <string name="eenheid">KM</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

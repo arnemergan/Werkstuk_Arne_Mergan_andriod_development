@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity">
+    tools:context=".activities.DetailActivity"
+    android:background="@color/colorPrimaryDark">
 
     <include
         android:id="@+id/det_bar"
@@ -12,7 +13,7 @@
 
     <fragment
         android:id="@+id/fragment_detail"
-        android:name="com.example.werkstuk_arne_mergan.MainDetailViewFragment"
+        android:name="com.example.werkstuk_arne_mergan.fragments.MainDetailViewFragment"
         android:layout_width="match_parent"
         android:layout_height="@+id/det_bar"
         app:layout_constraintBottom_toBottomOf="parent"
