@@ -36,7 +36,7 @@ public class DataSingleton {
     public static DataSingleton getInstance() {
         return SingletonHelper.INSTANCE;
     }
-    protected String downloadPlainText(String uri) {
+    public String downloadPlainText(String uri) {
         StringBuilder content = new StringBuilder();
         HttpURLConnection urlConnection = null;
         try {

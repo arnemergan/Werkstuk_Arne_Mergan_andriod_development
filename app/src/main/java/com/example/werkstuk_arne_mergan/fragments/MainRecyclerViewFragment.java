@@ -1,6 +1,7 @@
 package com.example.werkstuk_arne_mergan.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,33 +11,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.example.werkstuk_arne_mergan.activities.MainActivity;
 import com.example.werkstuk_arne_mergan.adapters.Main_Adapter;
 import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.activities.DetailActivity;
-import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
 import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
-import com.example.werkstuk_arne_mergan.models.Asteroids;
-import com.example.werkstuk_arne_mergan.models.NearEarthObjects;
-import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
-import com.example.werkstuk_arne_mergan.services.AsteroidParser;
+import com.example.werkstuk_arne_mergan.services.Helper;
 import com.example.werkstuk_arne_mergan.viewmodels.MainViewModel;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -57,7 +46,7 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         swipeRefreshLayout = view.findViewById(R.id.main_recycler_refresh);
         mainViewModel = new MainViewModel(this.getContext());
         progressBar.setVisibility(View.VISIBLE);
-        loadAsteroids(mainViewModel);
+        loadAsteroids(mainViewModel,this.getContext());
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
@@ -69,11 +58,16 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         startActivity(intent);
     }
 
-    public void loadAsteroids(MainViewModel mainViewModel){
+    public void loadAsteroids(MainViewModel mainViewModel, final Context context){
         mainViewModel.GetAsteroidList().observe(this, new Observer<List<Asteroid>>() {
             @Override
             public void onChanged(List<Asteroid> asteroids) {
                 progressBar.setVisibility(View.INVISIBLE);
+                if(!Helper.isConnected(context)){
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context,R.string.chechinternet,duration);
+                    toast.show();
+                }
                 LoadRecyclerview(asteroids);
             }
         });
@@ -88,7 +82,7 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
 
     @Override
     public void onRefresh() {
-        loadAsteroids(mainViewModel);
+        loadAsteroids(mainViewModel,this.getContext());
         swipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -1,8 +1,12 @@
 package com.example.werkstuk_arne_mergan.models;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity
+public
 class OrbitalData {
     @SerializedName("orbit_id")
     @Expose
@@ -72,6 +76,7 @@ class OrbitalData {
     private String equinox;
     @SerializedName("orbit_class")
     @Expose
+    @Embedded(prefix = "OrbitClass_")
     private OrbitClass orbitClass;
 
     public String getOrbitId() {

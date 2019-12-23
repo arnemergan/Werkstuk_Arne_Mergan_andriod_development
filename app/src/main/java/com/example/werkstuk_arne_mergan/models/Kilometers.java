@@ -1,8 +1,10 @@
 package com.example.werkstuk_arne_mergan.models;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity
 public class Kilometers {
     @SerializedName("estimated_diameter_min")
     @Expose

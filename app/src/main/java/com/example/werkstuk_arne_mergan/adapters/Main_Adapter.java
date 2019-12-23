@@ -1,6 +1,7 @@
 package com.example.werkstuk_arne_mergan.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,14 +46,20 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(Main_Adapter.ViewHolder holder, int position) {
-        Asteroid asteroid = asteroids.get(position);
-        holder.bind(asteroid,listener);
-        holder.tv_name.setText(asteroid.getName());
-        String date = asteroid.getCloseApproachData().get(0).getCloseApproachDateFull();
-        if(date.isEmpty()){
-            holder.tv_full_date.setText(asteroid.getCloseApproachData().get(0).getCloseApproachDate());
-        }else{
-            holder.tv_full_date.setText(date);
+        if(asteroids.size() > 1) {
+            Asteroid asteroid = asteroids.get(position);
+            if(asteroid != null){
+                holder.bind(asteroid, listener);
+                holder.tv_name.setText(asteroid.getName());
+                if(asteroid.getCloseApproachData() != null){
+                    String date = asteroid.getCloseApproachData().get(0).getCloseApproachDateFull();
+                    if (date == null || date == "") {
+                        holder.tv_full_date.setText(asteroid.getCloseApproachData().get(0).getCloseApproachDate());
+                    } else {
+                        holder.tv_full_date.setText(date);
+                    }
+                }
+            }
         }
     }
 

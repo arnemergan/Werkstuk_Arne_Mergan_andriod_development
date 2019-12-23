@@ -13,17 +13,11 @@ import com.example.werkstuk_arne_mergan.models.Kilometers;
 import com.example.werkstuk_arne_mergan.models.Links;
 import com.example.werkstuk_arne_mergan.models.Miles;
 import com.example.werkstuk_arne_mergan.models.MissDistance;
-import com.example.werkstuk_arne_mergan.models.OrbitClass;
 import com.example.werkstuk_arne_mergan.models.RelativeVelocity;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 

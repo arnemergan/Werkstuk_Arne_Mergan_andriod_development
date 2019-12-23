@@ -1,8 +1,10 @@
 package com.example.werkstuk_arne_mergan.models;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity
 public class RelativeVelocity {
     @SerializedName("kilometers_per_second")
     @Expose

@@ -1,6 +1,10 @@
 package com.example.werkstuk_arne_mergan.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,9 +15,12 @@ import java.util.List;
 public class Asteroid {
     @SerializedName("links")
     @Expose
+    @Ignore
     private Links links;
+    @PrimaryKey
     @SerializedName("id")
     @Expose
+    @NonNull
     private String id;
     @SerializedName("neo_reference_id")
     @Expose
@@ -32,15 +39,18 @@ public class Asteroid {
     private Double absoluteMagnitudeH;
     @SerializedName("estimated_diameter")
     @Expose
+    @Embedded(prefix = "EstimatedDiameter_")
     private EstimatedDiameter estimatedDiameter;
     @SerializedName("is_potentially_hazardous_asteroid")
     @Expose
     private Boolean isPotentiallyHazardousAsteroid;
     @SerializedName("close_approach_data")
     @Expose
+    @Ignore
     private List<CloseApproachDatum> closeApproachData = null;
     @SerializedName("orbital_data")
     @Expose
+    @Embedded(prefix = "OrbitalData_")
     private OrbitalData orbitalData;
     @SerializedName("is_sentry_object")
     @Expose

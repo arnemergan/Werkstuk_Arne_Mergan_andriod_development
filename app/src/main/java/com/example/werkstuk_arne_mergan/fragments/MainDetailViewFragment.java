@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.werkstuk_arne_mergan.R;
@@ -25,8 +27,11 @@ import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
 import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
 import com.example.werkstuk_arne_mergan.services.AsteroidParser;
+import com.example.werkstuk_arne_mergan.viewmodels.DetailViewModel;
 
 import org.json.JSONException;
+
+import java.util.List;
 
 //bron: https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
 /**
@@ -34,8 +39,9 @@ import org.json.JSONException;
  */
 public class MainDetailViewFragment extends Fragment {
     private RecyclerView recyclerView;
-
+    private DetailViewModel detailViewModel;
     private Asteroid asteroid = new Asteroid();
+    private ProgressBar progressBar;
 
     public MainDetailViewFragment() {
         // Required empty public constructor
@@ -49,20 +55,23 @@ public class MainDetailViewFragment extends Fragment {
         recyclerView = v.findViewById(R.id.listview_close_date);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         Intent intent = getActivity().getIntent();
+        progressBar = v.findViewById(R.id.detail_progress);
         String id = (String) intent.getStringExtra("asteroid_id");
+        detailViewModel = new DetailViewModel(this.getContext());
+        progressBar.setVisibility(View.VISIBLE);
         LoadAsteroid(id);
         return v;
     }
 
     private void LoadAsteroid(String id){
-        AsteroidRepo.DetailTask task = new AsteroidRepo.DetailTask(new AsteroidCallback() {
+        detailViewModel.GetAsteroid(id).observe(this, new Observer<Asteroid>() {
             @Override
-            public void onTaskCompleted(Asteroid result) throws JSONException {
-                asteroid = result;
+            public void onChanged(Asteroid newasteroid) {
+                progressBar.setVisibility(View.INVISIBLE);
+                asteroid = newasteroid;
                 setInfo();
-        }
-        },this.getContext());
-        task.execute(id);
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
