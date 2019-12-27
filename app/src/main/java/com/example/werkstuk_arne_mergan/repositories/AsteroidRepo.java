@@ -1,9 +1,7 @@
 package com.example.werkstuk_arne_mergan.repositories;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.werkstuk_arne_mergan.interfaces.AsteroidCallback;
 import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
@@ -14,28 +12,34 @@ import com.example.werkstuk_arne_mergan.room.AsteroidDao;
 import com.example.werkstuk_arne_mergan.room.AsteroidRoomDatabase;
 import com.example.werkstuk_arne_mergan.services.AsteroidParser;
 import com.example.werkstuk_arne_mergan.services.Helper;
+
 import org.json.JSONException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 public class AsteroidRepo {
-    public static class Task extends AsyncTask<Void, Void, Asteroids> {
+    public static class Task extends AsyncTask<List<Date>, Void, Asteroids> {
         private AsteroidsCallback asteroidsCallback;
         private Context context;
         private AsteroidDao asteroidDao;
 
         @Override
-        protected Asteroids doInBackground(Void... voids) {
+        protected Asteroids doInBackground(List<Date>... dates) {
             boolean connected = Helper.isConnected(context);
             Asteroids result = new Asteroids();
-            Vector<String> dates = new Vector<>();
-            dates.add("2015-09-08");
             List<Asteroid> asteroidList = null;
+            List<String>datums = new Vector<>();
+            for(Date date : dates[0]){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                datums.add(simpleDateFormat.format(date));
+            }
             if (connected) {
                 Asteroids asteroids;
                 try {
-                    asteroids = AsteroidParser.ParseAsteroids(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"), dates);
+                    asteroids = AsteroidParser.ParseAsteroids(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/feed?start_date="+ datums.get(0)+"&end_date="+datums.get(datums.size() - 1) +"&api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"), datums);
                     insertAsteroids(asteroidDao,asteroids);
                     return asteroids;
                 } catch (JSONException e) {

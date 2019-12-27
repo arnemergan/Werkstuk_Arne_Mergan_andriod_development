@@ -9,8 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cardview_item_detail"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="@color/any">
+            app:cardCornerRadius="8dp">
                 <LinearLayout
                     android:layout_marginLeft="4dp"
                     android:layout_width="match_parent"
@@ -41,6 +40,7 @@
                                             android:id="@+id/item_detail_velocity"
                                             android:textSize="15sp"
                                             android:paddingBottom="3dp"
+                                            android:textAlignment="center"
                                             android:paddingLeft="2dp"
                                             android:text="Earth">
                                         </TextView>
@@ -51,6 +51,7 @@
                                             android:id="@+id/item_detail_missdistance"
                                             android:textSize="15sp"
                                             android:paddingLeft="2dp"
+                                            android:textAlignment="center"
                                             android:paddingBottom="3dp"
                                             android:text="3 days left">
                                         </TextView>
@@ -67,16 +68,20 @@
                                             android:id="@+id/item_detail_body"
                                             android:textSize="17sp"
                                             android:textStyle="bold"
+                                            android:textAlignment="center"
                                             android:paddingBottom="3dp"
                                             android:paddingLeft="2dp"
                                             android:text="Earth">
                                         </TextView>
                                         <TextView
+                                            android:background="@color/toolbar_text"
+                                            android:textColor="@color/toolbar_main"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:id="@+id/item_detail_days"
                                             android:textSize="17sp"
+                                            android:textAlignment="center"
                                             android:textStyle="bold"
                                             android:paddingLeft="2dp"
                                             android:paddingBottom="3dp"

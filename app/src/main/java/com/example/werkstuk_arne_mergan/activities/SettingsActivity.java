@@ -1,6 +1,7 @@
 package com.example.werkstuk_arne_mergan.activities;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

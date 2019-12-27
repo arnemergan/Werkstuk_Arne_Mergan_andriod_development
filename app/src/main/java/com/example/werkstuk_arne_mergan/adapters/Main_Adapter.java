@@ -61,6 +61,11 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
                 }
             }
         }
+        if(position % 2 == 0){
+            holder.view.setBackgroundResource(R.color.even_list);
+        }else{
+            holder.view.setBackgroundResource(R.color.odd_list);
+        }
     }
 
     @Override
@@ -73,10 +78,12 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
     class ViewHolder extends RecyclerView.ViewHolder{
          TextView tv_name;
          TextView tv_full_date;
+         View view;
          ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.item_asteroid_name);
             tv_full_date = itemView.findViewById(R.id.item_asteroid_date);
+            view = itemView;
         }
 
          void bind(final Asteroid item, final OnItemClickListener listener){

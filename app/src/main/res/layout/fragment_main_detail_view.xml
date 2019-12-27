@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_main"
     tools:context=".fragments.MainDetailViewFragment">
     <ProgressBar
         android:id="@+id/detail_progress"
@@ -25,9 +26,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-
                     android:gravity="center_horizontal"
-                    android:background="@color/colorPrimaryDark">
+                    android:background="@color/toolbar_main">
                     <ImageView
                         android:layout_width="120dp"
                         android:layout_height="120dp"
@@ -39,7 +39,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/item_asteroid_name_det"
                         android:textSize="28sp"
-                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/toolbar_text"
+                        android:layout_marginBottom="25dp"
                         android:textStyle="bold"
                         android:text="test" />
                 </LinearLayout>
@@ -52,6 +53,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/info"
+                        android:textAlignment="center"
+                        android:textColor="@color/toolbar_main"
+                        android:background="@color/toolbar_text"
                         android:paddingLeft="2sp"
                         android:paddingBottom="10sp"
                         android:textStyle="bold"
@@ -59,8 +63,7 @@
                     </TextView>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary">
+                        android:layout_height="wrap_content">
                         <TableLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -71,7 +74,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/magnitude"
-                                    android:textColor="@color/colorAccent"
                                     android:textStyle="bold"
                                     android:textSize="16sp"
                                     android:paddingLeft="2sp"
@@ -81,7 +83,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="20sp"
-                                    android:textColor="@color/white"
                                     android:paddingLeft="2sp"
                                     android:paddingBottom="10sp" />
                             </TableRow>
@@ -92,7 +93,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/diameter"
-                                    android:textColor="@color/colorAccent"
                                     android:textStyle="bold"
                                     android:textSize="16sp"
                                     android:paddingLeft="2sp"
@@ -102,7 +102,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="20sp"
-                                    android:textColor="@color/white"
                                     android:paddingLeft="2sp"
                                     android:paddingBottom="10sp" />
                             </TableRow>
@@ -113,7 +112,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/hazardous"
-                                    android:textColor="@color/colorAccent"
                                     android:textStyle="bold"
                                     android:textSize="16sp"
                                     android:paddingLeft="2sp"
@@ -123,7 +121,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="20sp"
-                                    android:textColor="@color/white"
                                     android:paddingLeft="2sp"
                                     android:paddingBottom="10sp" />
                             </TableRow>
@@ -142,6 +139,9 @@
                         android:textSize="20sp"
                         android:paddingLeft="2sp"
                         android:paddingBottom="10sp"
+                        android:textColor="@color/toolbar_main"
+                        android:background="@color/toolbar_text"
+                        android:textAlignment="center"
                         >
                     </TextView>
                     <androidx.recyclerview.widget.RecyclerView

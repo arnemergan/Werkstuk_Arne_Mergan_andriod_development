@@ -8,9 +8,11 @@
     <color name="venus">#ffff1a</color>
     <color name="merc">#ff33ff</color>
     <color name="mars">#ff3300</color>
-    <color name="any">#999999</color>
+    <color name="toolbar_main">#212121</color>
+    <color name="toolbar_text">#76ff03</color>
     <color name="colorWarning">#ffd400</color>
     <color name="colorNoWarning">#3bccff</color>
-    <color name="colorBackgroundToolbar">#f3f3f3</color>
-    <color name="colorFontToolbar">#000000</color>
+    <color name="odd_list">#fafafa</color>
+    <color name="even_list">#e0e0e0</color>
+    <color name="background_main">#fafafa</color>
 </resources>

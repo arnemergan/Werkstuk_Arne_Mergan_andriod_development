@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.MainRecyclerViewFragment">
     <ProgressBar
         android:id="@+id/main_recycler_progress"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ProgressBar>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/main_recycler_refresh">
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!-- <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/white" />-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/main_recycler_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <!-- Bron: https://developer.android.com/guide/topics/ui/layout/recyclerview -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_recycler_view"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/main_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:layout_marginTop="100dp"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

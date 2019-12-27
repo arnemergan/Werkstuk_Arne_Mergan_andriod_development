@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.werkstuk_arne_mergan.R;
@@ -28,6 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar maintoolbar = (Toolbar) findViewById(R.id.det_bar);
         setSupportActionBar(maintoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_back);
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.example.werkstuk_arne_mergan.adapters;
-
 import android.content.Context;
 import android.graphics.Color;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
-import com.google.android.material.card.MaterialCardView;
-
-import java.time.LocalDate;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +24,7 @@ import java.util.List;
 public class Detail_Adapter extends RecyclerView.Adapter< Detail_Adapter.ViewHolder>{
     private Context context;
     private List<CloseApproachDatum> closeApproachData;
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     public Detail_Adapter(Context context, List<CloseApproachDatum> closeApproachData) {
         this.context = context;
@@ -47,9 +45,21 @@ public class Detail_Adapter extends RecyclerView.Adapter< Detail_Adapter.ViewHol
         CloseApproachDatum closeApproachDatum = closeApproachData.get(position);
         holder.detail_date.setText(closeApproachDatum.getCloseApproachDate());
         holder.detail_body.setText(closeApproachDatum.getOrbitingBody());
-        holder.detail_miss.setText(closeApproachDatum.getMissDistance().getKilometers() + " km");
-        holder.detail_velo.setText(closeApproachDatum.getRelativeVelocity().getKilometersPerHour() + " km/u");
-        holder.detail_days.setText("3 days left");
+        Double missdistance = Double.parseDouble(closeApproachDatum.getMissDistance().getKilometers());
+        Double velocity = Double.parseDouble(closeApproachDatum.getRelativeVelocity().getKilometersPerHour());
+        holder.detail_miss.setText(decimalFormat.format(missdistance)+ " km");
+        holder.detail_velo.setText(decimalFormat.format(velocity) + " km/u");
+        try {
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = calendar.getTime();
+            Date date1 = simpleDateFormat.parse(closeApproachDatum.getCloseApproachDate());
+            long diff = date1.getTime() - date.getTime();
+            long days = diff / (1000*60*60*24);
+            holder.detail_days.setText( days + " " + context.getString(R.string.days_left));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         switch (closeApproachDatum.getOrbitingBody()){
             case "Merc":
                 holder.cardview.setCardBackgroundColor(Color.parseColor("#ff33ff"));

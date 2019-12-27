@@ -10,6 +10,7 @@ import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.models.Asteroids;
 import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
 
+import java.util.Date;
 import java.util.List;
 
 public class MainViewModel {
@@ -20,18 +21,18 @@ public class MainViewModel {
         this.context = context;
     }
 
-    public LiveData<List<Asteroid>> GetAsteroidList(){
-        LoadAsteroids();
+    public LiveData<List<Asteroid>> GetAsteroidList(List<Date>dates){
+        LoadAsteroids(dates);
         return asteroids;
     }
 
-    private void LoadAsteroids() {
+    private void LoadAsteroids(List<Date>dates) {
         AsteroidRepo.Task task = new AsteroidRepo.Task(new AsteroidsCallback() {
             @Override
             public void onTaskCompleted(Asteroids result) {
                 asteroids.setValue(result.getNearEarthObjects());
             }
         }, context);
-        task.execute();
+        task.execute(dates);
     }
 }

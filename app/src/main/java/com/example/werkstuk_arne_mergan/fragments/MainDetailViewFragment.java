@@ -3,6 +3,7 @@ package com.example.werkstuk_arne_mergan.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,11 @@ import com.example.werkstuk_arne_mergan.viewmodels.DetailViewModel;
 
 import org.json.JSONException;
 
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 //bron: https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
@@ -42,6 +48,7 @@ public class MainDetailViewFragment extends Fragment {
     private DetailViewModel detailViewModel;
     private Asteroid asteroid = new Asteroid();
     private ProgressBar progressBar;
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     public MainDetailViewFragment() {
         // Required empty public constructor
@@ -82,9 +89,9 @@ public class MainDetailViewFragment extends Fragment {
         TextView text_name = (TextView) v.findViewById(R.id.item_asteroid_name_det);
         text_name.setText(asteroid.getName());
         TextView magnitude = (TextView) v.findViewById(R.id.value_magnitude);
-        magnitude.setText(String.valueOf(asteroid.getAbsoluteMagnitudeH()));
+        magnitude.setText(String.valueOf(decimalFormat.format(asteroid.getAbsoluteMagnitudeH())));
         TextView diameter = (TextView) v.findViewById(R.id.value_diameter);
-        diameter.setText(asteroid.getEstimatedDiameter().getKilometers().getEstimatedDiameterMin() + " - " + asteroid.getEstimatedDiameter().getKilometers().getEstimatedDiameterMax() + " km");
+        diameter.setText(decimalFormat.format(asteroid.getEstimatedDiameter().getKilometers().getEstimatedDiameterMin())+ " - " + decimalFormat.format(asteroid.getEstimatedDiameter().getKilometers().getEstimatedDiameterMax()) + " km");
         TextView hazarduos = (TextView) v.findViewById(R.id.value_hazardous);
         hazarduos.setText(String.valueOf(asteroid.getIsPotentiallyHazardousAsteroid()));
     }
