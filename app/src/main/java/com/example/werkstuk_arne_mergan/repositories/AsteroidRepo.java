@@ -3,13 +3,17 @@ package com.example.werkstuk_arne_mergan.repositories;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.werkstuk_arne_mergan.interfaces.AsteroidCallback;
 import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.models.Asteroids;
 import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
+import com.example.werkstuk_arne_mergan.models.Follow;
 import com.example.werkstuk_arne_mergan.room.AsteroidDao;
 import com.example.werkstuk_arne_mergan.room.AsteroidRoomDatabase;
+import com.example.werkstuk_arne_mergan.room.FollowDao;
 import com.example.werkstuk_arne_mergan.services.AsteroidParser;
 import com.example.werkstuk_arne_mergan.services.Helper;
 
@@ -21,6 +25,60 @@ import java.util.List;
 import java.util.Vector;
 
 public class AsteroidRepo {
+
+    private AsteroidDao asteroidDao;
+    private LiveData<List<Asteroid>> asteroids;
+
+    public AsteroidRepo(Context context) {
+        AsteroidRoomDatabase roomDatabase = AsteroidRoomDatabase.getDatabase(context);
+        asteroidDao = roomDatabase.asteroidDao();
+        asteroids = asteroidDao.GetAllAsteroids();
+    }
+
+    public void insert(){
+
+    }
+
+    public void update(){
+
+    }
+
+    public void delete(){
+
+    }
+
+    public LiveData<List<Asteroid>> getAsteroids() {
+        return asteroids;
+    }
+
+    public static class InsertTask extends AsyncTask<Asteroid, Void, Void> {
+        private AsteroidDao asteroidDao;
+
+        public InsertTask(AsteroidDao asteroidDao) {
+            this.asteroidDao = asteroidDao;
+        }
+
+        @Override
+        protected Void doInBackground(Asteroid... asteroids) {
+            asteroidDao.Insert(asteroids[0]);
+            return null;
+        }
+    }
+
+    public static class DeleteTask extends AsyncTask<Asteroid, Void, Void> {
+        private AsteroidDao asteroidDao;
+
+        public DeleteTask(AsteroidDao asteroidDao) {
+            this.asteroidDao = asteroidDao;
+        }
+
+        @Override
+        protected Void doInBackground(Asteroid... asteroids) {
+            asteroidDao.Delete(asteroids[0]);
+            return null;
+        }
+    }
+
     public static class Task extends AsyncTask<List<Date>, Void, Asteroids> {
         private AsteroidsCallback asteroidsCallback;
         private Context context;
@@ -40,6 +98,11 @@ public class AsteroidRepo {
                 Asteroids asteroids;
                 try {
                     asteroids = AsteroidParser.ParseAsteroids(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/feed?start_date="+ datums.get(0)+"&end_date="+datums.get(datums.size() - 1) +"&api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"), datums);
+                    if(asteroids == null){
+                        asteroidList = new Vector<>();
+                        result.setNearEarthObjects(asteroidList);
+                        return result;
+                    }
                     insertAsteroids(asteroidDao,asteroids);
                     return asteroids;
                 } catch (JSONException e) {
@@ -93,6 +156,11 @@ public class AsteroidRepo {
                 try {
                     Asteroid asteroid;
                     asteroid = AsteroidParser.ParseSingleAsteroid(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/neo/" + strings[0] + "?api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"));
+                    if(asteroid == null){
+                        asteroid = new Asteroid();
+                        asteroid.setCloseApproachData(new Vector<CloseApproachDatum>());
+                        return asteroid;
+                    }
                     insertAsteroid(asteroidDao,asteroid);
                     return asteroid;
                 } catch (JSONException e) {

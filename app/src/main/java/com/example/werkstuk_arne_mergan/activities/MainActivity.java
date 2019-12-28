@@ -1,6 +1,7 @@
 package com.example.werkstuk_arne_mergan.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.werkstuk_arne_mergan.R;
+import com.example.werkstuk_arne_mergan.fragments.MainDetailViewFragment;
 import com.example.werkstuk_arne_mergan.fragments.MainRecyclerViewFragment;
+import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
 import com.example.werkstuk_arne_mergan.services.Helper;
@@ -30,11 +33,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
+    private boolean twopane = false;
+    private FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
+
+        if (findViewById(R.id.fragment_detail) != null) {
+            twopane = true;
+        }
+        if(twopane){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_list, new MainRecyclerViewFragment(fragmentManager,twopane))
+                    .commit();
+        }
         androidx.appcompat.widget.Toolbar mlt = findViewById(R.id.main_bar);
         setSupportActionBar(mlt);
     }
@@ -53,6 +69,9 @@ public class MainActivity extends AppCompatActivity{
             Intent settings_intent = new Intent(this, SettingsActivity.class);
             startActivity(settings_intent);
             return true;
+        }else if(item.getItemId() == R.id.action_favorites){
+            Intent follow_intent = new Intent(this, FollowActivity.class);
+            startActivity(follow_intent);
         }
         return super.onOptionsItemSelected(item);
     }

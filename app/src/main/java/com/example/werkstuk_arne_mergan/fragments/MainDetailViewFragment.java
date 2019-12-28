@@ -19,8 +19,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.werkstuk_arne_mergan.R;
+import com.example.werkstuk_arne_mergan.activities.MainActivity;
 import com.example.werkstuk_arne_mergan.adapters.Detail_Adapter;
 import com.example.werkstuk_arne_mergan.interfaces.AsteroidCallback;
 import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
@@ -49,11 +51,15 @@ public class MainDetailViewFragment extends Fragment {
     private Asteroid asteroid = new Asteroid();
     private ProgressBar progressBar;
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    private String id = null;
 
     public MainDetailViewFragment() {
         // Required empty public constructor
     }
 
+    public MainDetailViewFragment(String id) {
+        this.id = id;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -63,11 +69,19 @@ public class MainDetailViewFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         Intent intent = getActivity().getIntent();
         progressBar = v.findViewById(R.id.detail_progress);
-        String id = (String) intent.getStringExtra("asteroid_id");
+        if(id == null) {
+            id = (String) intent.getStringExtra("asteroid_id");
+        }
         detailViewModel = new DetailViewModel(this.getContext());
         progressBar.setVisibility(View.VISIBLE);
         LoadAsteroid(id);
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        id = null;
     }
 
     private void LoadAsteroid(String id){
@@ -76,6 +90,13 @@ public class MainDetailViewFragment extends Fragment {
             public void onChanged(Asteroid newasteroid) {
                 progressBar.setVisibility(View.INVISIBLE);
                 asteroid = newasteroid;
+                if(asteroid == null){
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(getContext(),R.string.chechinternet,duration);
+                    toast.show();
+                    startActivity(intent);
+                }
                 setInfo();
             }
         });

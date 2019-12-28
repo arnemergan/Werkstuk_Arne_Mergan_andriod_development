@@ -2,33 +2,46 @@ package com.example.werkstuk_arne_mergan.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.werkstuk_arne_mergan.R;
+import com.example.werkstuk_arne_mergan.adapters.Follow_Adapter;
+import com.example.werkstuk_arne_mergan.models.Follow;
+import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
 
-public class DetailActivity extends AppCompatActivity {
+import java.util.List;
 
+public class FollowActivity extends AppCompatActivity {
 
+    private FollowViewModel followViewModel;
+    private RecyclerView recyclerView;
+    private Follow_Adapter follow_adapter;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
-        Toolbar maintoolbar = (Toolbar) findViewById(R.id.det_bar);
+        setContentView(R.layout.activity_follow);
+        Toolbar maintoolbar = (Toolbar) findViewById(R.id.main_bar);
         setSupportActionBar(maintoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_back);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
+        followViewModel = new FollowViewModel(this);
+        follow_adapter = new Follow_Adapter(followViewModel);
+        recyclerView = findViewById(R.id.follow_recycler_view);
+        recyclerView.setAdapter(follow_adapter);
+        followViewModel.getFollows().observe(this ,new Observer<List<Follow>>() {
+            @Override
+            public void onChanged(List<Follow> follows) {
+                follow_adapter.setFollows(follows);
+            }
+        });
     }
 
     @Override

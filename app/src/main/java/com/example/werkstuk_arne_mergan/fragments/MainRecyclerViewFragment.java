@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,16 +36,28 @@ import java.util.Vector;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainRecyclerViewFragment extends Fragment implements OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemSelectedListener {
+public class MainRecyclerViewFragment extends Fragment implements OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private Main_Adapter main_adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MainViewModel mainViewModel;
+    private List<Date>dates = new Vector<>();
+    private FragmentManager fragmentManager;
+    private boolean twopane = false;
+
+    public MainRecyclerViewFragment() {
+    }
+
+    public MainRecyclerViewFragment(FragmentManager fragmentManager,Boolean twopane) {
+        this.fragmentManager = fragmentManager;
+        this.twopane = twopane;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_list_view, container, false);
+        setupDates();
         recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler_view);
         progressBar = view.findViewById(R.id.main_recycler_progress);
         swipeRefreshLayout = view.findViewById(R.id.main_recycler_refresh);
@@ -53,32 +68,42 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         return view;
     }
 
-    public void setupSpinner(View view){
-        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.calendar_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-    }
-
-    public void setupRecyclerView(){
-        List<Date>dates = new Vector<>();
+    public void setupDates(){
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
         dates.add(date);
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_YEAR, -7);
         dates.add(calendar.getTime());
+    }
+
+
+   /* public void setupSpinner(View view){
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.calendar_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }*/
+
+    public void setupRecyclerView(){
         loadAsteroids(mainViewModel,this.getContext(),dates);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     public void onItemClick(Asteroid asteroid) {
-        Intent intent = new Intent(this.getActivity(),DetailActivity.class);
-        intent.putExtra("asteroid_id", asteroid.getId());
-        startActivity(intent);
+        if(!twopane) {
+            Intent intent = new Intent(this.getActivity(), DetailActivity.class);
+            intent.putExtra("asteroid_id", asteroid.getId());
+            startActivity(intent);
+        }else {
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_detail, new MainDetailViewFragment(asteroid.getId()))
+                    .commit();
+        }
     }
+
 
     public void loadAsteroids(MainViewModel mainViewModel, final Context context,List<Date>dates){
         mainViewModel.GetAsteroidList(dates).observe(this, new Observer<List<Asteroid>>() {
@@ -95,6 +120,8 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         });
     }
 
+
+
     public void LoadRecyclerview(List<Asteroid> asteroids){
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         main_adapter = new Main_Adapter(this.getActivity(), asteroids,this);
@@ -103,19 +130,19 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        twopane = false;
+    }
+
+    @Override
     public void onRefresh() {
-        List<Date>dates = new Vector<>();
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        dates.add(date);
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_YEAR, -7);
-        dates.add(calendar.getTime());
         loadAsteroids(mainViewModel,this.getContext(),dates);
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
+
+   /* @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
     }
@@ -123,5 +150,5 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
+    }*/
 }

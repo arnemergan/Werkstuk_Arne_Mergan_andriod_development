@@ -7,18 +7,7 @@
 
     <!-- Preference Titles -->
     <string name="messages_header">Apparaat</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
     <string name="lang_title">Taal</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -32,5 +21,9 @@
     <string name="chechinternet">Controleer internetverbinding</string>
     <string name="select_date">selecteer datum</string>
     <string name="days_left">dagen</string>
+    <string name="follow_this_asteroid">Volg mij</string>
+    <string name="volgend">volgend</string>
+    <string name="follow">Volgen</string>
+    <string name="unfollow">Niet meer volgen</string>
 
 </resources>

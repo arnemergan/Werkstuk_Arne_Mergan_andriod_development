@@ -23,6 +23,9 @@ import java.util.Vector;
 
 public abstract class AsteroidParser {
     public static Asteroids ParseAsteroids(String result, List<String> dates) throws JSONException {
+        if(result == null || result == ""){
+            return null;
+        }
         Asteroids asteroids = new Asteroids();
         Links links = new Links();
         List<Asteroid> NearEarthObjects = new Vector<Asteroid>();
@@ -46,11 +49,12 @@ public abstract class AsteroidParser {
     }
 
     public static Asteroid ParseSingleAsteroid(String result) throws JSONException{
+        if(result == null || result == ""){
+            return null;
+        }
         Asteroid asteroid;
         JSONObject obj = new JSONObject(result);
         asteroid = ParseAsteroid(obj);
-        /*OrbitClass orbital = new OrbitClass();
-        JSONObject aorbital = obj.getJSONObject("orbital_data");*/
         return asteroid;
     }
 

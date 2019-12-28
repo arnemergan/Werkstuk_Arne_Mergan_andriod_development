@@ -1,20 +1,18 @@
 package com.example.werkstuk_arne_mergan.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.werkstuk_arne_mergan.R;
-import com.example.werkstuk_arne_mergan.activities.MainActivity;
 import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
-import com.example.werkstuk_arne_mergan.models.Asteroids;
 
 import java.util.List;
 
@@ -22,6 +20,7 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
     private Context context;
     private List<Asteroid> asteroids;
     private OnItemClickListener listener;
+    private Boolean favorite = true;
 
     public Main_Adapter(Context context, List<Asteroid> asteroids, OnItemClickListener listener) {
         this.context = context;
@@ -60,13 +59,34 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
                     }
                 }
             }
-        }
-        if(position % 2 == 0){
-            holder.view.setBackgroundResource(R.color.even_list);
+            if(position % 2 != 0){
+                holder.view.setBackgroundResource(R.color.even_list);
+            }else{
+                holder.view.setBackgroundResource(R.color.odd_list);
+            }
+            setupOnclickFav(holder.view);
         }else{
-            holder.view.setBackgroundResource(R.color.odd_list);
+            holder.tv_name.setText(R.string.nodata);
         }
     }
+
+    public void setupOnclickFav(View view){
+        final ImageView image = view.findViewById(R.id.fav_main);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(favorite){
+                    image.setImageResource(R.mipmap.ic_fav);
+                    favorite = false;
+                }else{
+                    image.setImageResource(R.mipmap.ic_nofav);
+                    favorite = true;
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public int getItemCount() {

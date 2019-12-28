@@ -1,5 +1,6 @@
 package com.example.werkstuk_arne_mergan.room;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -14,13 +15,13 @@ import java.util.List;
 @Dao
 public interface AsteroidDao {
     @Query("SELECT * FROM asteroid")
-    List<Asteroid> GetAllAsteroids();
+    LiveData<List<Asteroid>> GetAllAsteroids();
 
     @Query("SELECT * FROM asteroid WHERE id = :id")
     Asteroid GetAsteroid(String id);
 
     @Query("SELECT * FROM closeapproachdatum WHERE asteroid_id = :id LIMIT 1")
-    List<CloseApproachDatum> GetCloseApproachData(String id);
+    LiveData<List<CloseApproachDatum>> GetCloseApproachData(String id);
 
     @Update
     void Update(Asteroid asteroid, List<CloseApproachDatum> closeApproachData);

@@ -60,7 +60,7 @@
                         <TableLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/colorPrimaryDark"
+                            android:background="@color/white"
                             android:weightSum="2">
                                 <TableRow >
                                         <TextView
@@ -71,6 +71,7 @@
                                             android:textAlignment="center"
                                             android:paddingBottom="3dp"
                                             android:paddingLeft="2dp"
+                                            android:background="@color/white"
                                             android:text="Earth">
                                         </TextView>
                                         <TextView

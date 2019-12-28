@@ -42,39 +42,43 @@ public class Detail_Adapter extends RecyclerView.Adapter< Detail_Adapter.ViewHol
 
     @Override
     public void onBindViewHolder(Detail_Adapter.ViewHolder holder, int position) {
-        CloseApproachDatum closeApproachDatum = closeApproachData.get(position);
-        holder.detail_date.setText(closeApproachDatum.getCloseApproachDate());
-        holder.detail_body.setText(closeApproachDatum.getOrbitingBody());
-        Double missdistance = Double.parseDouble(closeApproachDatum.getMissDistance().getKilometers());
-        Double velocity = Double.parseDouble(closeApproachDatum.getRelativeVelocity().getKilometersPerHour());
-        holder.detail_miss.setText(decimalFormat.format(missdistance)+ " km");
-        holder.detail_velo.setText(decimalFormat.format(velocity) + " km/u");
-        try {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = calendar.getTime();
-            Date date1 = simpleDateFormat.parse(closeApproachDatum.getCloseApproachDate());
-            long diff = date1.getTime() - date.getTime();
-            long days = diff / (1000*60*60*24);
-            holder.detail_days.setText( days + " " + context.getString(R.string.days_left));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        switch (closeApproachDatum.getOrbitingBody()){
-            case "Merc":
-                holder.cardview.setCardBackgroundColor(Color.parseColor("#ff33ff"));
-                break;
-            case "Venus":
-                holder.cardview.setCardBackgroundColor(Color.parseColor("#ffff1a"));
-                break;
-            case "Earth":
-                holder.cardview.setCardBackgroundColor(Color.parseColor("#0066ff"));
-                break;
-            case "Mars":
-                holder.cardview.setCardBackgroundColor(Color.parseColor("#ff3300"));
-                break;
-            default:
+        if(closeApproachData.size() > 1) {
+            CloseApproachDatum closeApproachDatum = closeApproachData.get(position);
+            holder.detail_date.setText(closeApproachDatum.getCloseApproachDate());
+            holder.detail_body.setText(closeApproachDatum.getOrbitingBody());
+            Double missdistance = Double.parseDouble(closeApproachDatum.getMissDistance().getKilometers());
+            Double velocity = Double.parseDouble(closeApproachDatum.getRelativeVelocity().getKilometersPerHour());
+            holder.detail_miss.setText(decimalFormat.format(missdistance) + " km");
+            holder.detail_velo.setText(decimalFormat.format(velocity) + " km/u");
+            try {
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = calendar.getTime();
+                Date date1 = simpleDateFormat.parse(closeApproachDatum.getCloseApproachDate());
+                long diff = date1.getTime() - date.getTime();
+                long days = diff / (1000 * 60 * 60 * 24);
+                holder.detail_days.setText(days + " " + context.getString(R.string.days_left));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            switch (closeApproachDatum.getOrbitingBody()) {
+                case "Merc":
+                    holder.cardview.setCardBackgroundColor(Color.parseColor("#ff33ff"));
+                    break;
+                case "Venus":
+                    holder.cardview.setCardBackgroundColor(Color.parseColor("#ffff1a"));
+                    break;
+                case "Earth":
+                    holder.cardview.setCardBackgroundColor(Color.parseColor("#0066ff"));
+                    break;
+                case "Mars":
+                    holder.cardview.setCardBackgroundColor(Color.parseColor("#ff3300"));
+                    break;
+                default:
 
+            }
+        }else{
+            holder.detail_date.setText(R.string.nodata);
         }
     }
 
