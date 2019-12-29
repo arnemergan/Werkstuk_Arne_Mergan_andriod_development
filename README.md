@@ -1,10 +1,11 @@
 # Werkstuk Android Development
-Het werkstuk is een Android applicatie die een overzicht biedt van dichtsbijzijnde astroïden.
+Het werkstuk is een Android applicatie die een overzicht biedt van dichtsbijzijnde astroïden bij de aarde.
 Het werkstuk bevat een lijst van alle astroïden gesorteerd op datum met bij elk een detailpagina.
+De gebruiker kan uit deze lijst kiezen welke astroïden hij/zij wilt volgen.
 Het bevat ook een instellingen pagina waar de gebruiker de taal kan aanpassen.
 
 # Bronnen:
-Modules van het vak Android Development  
+Modules van het vak Android Development gegeven te Erasmushogeschool Brussel
 https://antonioleiva.com/swiperefreshlayout/  
 https://www.mkyong.com/java/java-display-double-in-2-decimal-points/  
 https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/  
