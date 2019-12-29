@@ -25,5 +25,6 @@
     <string name="volgend">volgend</string>
     <string name="follow">Volgen</string>
     <string name="unfollow">Niet meer volgen</string>
+    <string name="follow_list">Volgend</string>
 
 </resources>

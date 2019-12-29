@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -33,13 +34,15 @@ public class FollowActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_back);
         followViewModel = new FollowViewModel(this);
-        follow_adapter = new Follow_Adapter(followViewModel);
+        follow_adapter = new Follow_Adapter(followViewModel,this);
         recyclerView = findViewById(R.id.follow_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(follow_adapter);
         followViewModel.getFollows().observe(this ,new Observer<List<Follow>>() {
             @Override
             public void onChanged(List<Follow> follows) {
                 follow_adapter.setFollows(follows);
+                follow_adapter.notifyDataSetChanged();
             }
         });
     }

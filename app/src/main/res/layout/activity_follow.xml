@@ -9,6 +9,16 @@
     <include
         android:id="@+id/main_bar"
         layout="@layout/main_toolbar" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/follow_list"
+        android:textAlignment="center"
+        android:padding="8dp"
+        android:textSize="17dp"
+        android:textColor="@color/toolbar_main">
+
+    </TextView>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/follow_recycler_view"
         android:layout_width="match_parent"

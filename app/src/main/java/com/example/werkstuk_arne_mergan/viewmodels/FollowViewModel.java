@@ -15,6 +15,10 @@ public class FollowViewModel {
     public FollowViewModel(Context context) {
         followRepo = new FollowRepo(context);
         follows = followRepo.getFollows();
+}
+
+    public LiveData<Follow> getFollow(String id){
+        return followRepo.get(id);
     }
 
     public void insert(Follow follow){

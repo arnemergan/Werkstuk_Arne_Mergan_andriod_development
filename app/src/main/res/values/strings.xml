@@ -24,6 +24,7 @@
     <string name="volgend">Following</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="follow_list">Followed</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

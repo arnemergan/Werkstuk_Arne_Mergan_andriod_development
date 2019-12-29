@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -18,7 +19,10 @@ public interface AsteroidDao {
     LiveData<List<Asteroid>> GetAllAsteroids();
 
     @Query("SELECT * FROM asteroid WHERE id = :id")
-    Asteroid GetAsteroid(String id);
+    LiveData<Asteroid> GetAsteroid(String id);
+
+    @Query("SELECT * FROM asteroid WHERE id = :id")
+    Asteroid GetAsteroidCheck(String id);
 
     @Query("SELECT * FROM closeapproachdatum WHERE asteroid_id = :id LIMIT 1")
     LiveData<List<CloseApproachDatum>> GetCloseApproachData(String id);
@@ -35,12 +39,9 @@ public interface AsteroidDao {
     @Query("DELETE FROM CloseApproachDatum WHERE asteroid_id = :id")
     void DeleteCloseApproachData(String id);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void Insert(Asteroid asteroid);
 
     @Insert
     void Insert(List<CloseApproachDatum> closeApproachData);
-
-    @Insert
-    void Insert(Asteroid asteroid, List<CloseApproachDatum> closeApproachData);
 }

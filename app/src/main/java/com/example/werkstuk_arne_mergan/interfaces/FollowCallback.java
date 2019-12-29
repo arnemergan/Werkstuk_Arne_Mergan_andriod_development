@@ -6,6 +6,6 @@ import com.example.werkstuk_arne_mergan.models.Follow;
 import java.util.List;
 
 public interface FollowCallback {
-    public void onTaskCompleted(List<Follow>follows);
+    public void onTaskCompleted(Follow follow);
 
 }

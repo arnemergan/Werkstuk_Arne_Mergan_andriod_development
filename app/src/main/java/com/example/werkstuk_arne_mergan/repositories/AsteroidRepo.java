@@ -2,53 +2,135 @@ package com.example.werkstuk_arne_mergan.repositories;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-
-import com.example.werkstuk_arne_mergan.interfaces.AsteroidCallback;
-import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
+import androidx.lifecycle.MutableLiveData;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.models.Asteroids;
-import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
-import com.example.werkstuk_arne_mergan.models.Follow;
 import com.example.werkstuk_arne_mergan.room.AsteroidDao;
 import com.example.werkstuk_arne_mergan.room.AsteroidRoomDatabase;
-import com.example.werkstuk_arne_mergan.room.FollowDao;
 import com.example.werkstuk_arne_mergan.services.AsteroidParser;
 import com.example.werkstuk_arne_mergan.services.Helper;
-
+import com.example.werkstuk_arne_mergan.interfaces.AsteroidCallback;
+import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
 import org.json.JSONException;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 public class AsteroidRepo {
 
     private AsteroidDao asteroidDao;
-    private LiveData<List<Asteroid>> asteroids;
+    private Context context;
+    private MutableLiveData<Asteroid> asteroidMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Asteroid>> asteroidsMutableLiveData = new MutableLiveData<>();
 
     public AsteroidRepo(Context context) {
+        this.context = context;
         AsteroidRoomDatabase roomDatabase = AsteroidRoomDatabase.getDatabase(context);
         asteroidDao = roomDatabase.asteroidDao();
-        asteroids = asteroidDao.GetAllAsteroids();
     }
 
-    public void insert(){
-
+    public Boolean getConnection(){
+        return Helper.isConnected(context);
     }
 
-    public void update(){
-
+    public LiveData<Asteroid> getAsteroid(String id){
+        if(getConnection()){
+            new GetTask(new AsteroidCallback() {
+                @Override
+                public void onTaskCompleted(Asteroid result) throws JSONException {
+                    if(result != null){
+                        new InsertTask(asteroidDao).execute(result);
+                        asteroidMutableLiveData.postValue(result);
+                    }
+                }
+            }).execute(id);
+            return asteroidMutableLiveData;
+        }else{
+            return asteroidDao.GetAsteroid(id);
+        }
     }
 
-    public void delete(){
-
+    public LiveData<List<Asteroid>> getAsteroids(List<Date>dates) {
+        List<String> datums = AsteroidParser.ParseDates(dates);
+        if(getConnection()) {
+            //noinspection unchecked
+            new GetListTask(new AsteroidsCallback() {
+                @SuppressWarnings("unchecked")
+                @Override
+                public void onTaskCompleted(Asteroids result) {
+                    if (result != null) {
+                    if (result.getNearEarthObjects() != null) {
+                        for (Asteroid asteroid : result.getNearEarthObjects()) {
+                            new InsertTask(asteroidDao).execute(asteroid);
+                        }
+                        asteroidsMutableLiveData.postValue(result.getNearEarthObjects());
+                    }
+                }
+            }
+            }).execute(datums);
+            return asteroidsMutableLiveData;
+        }else{
+            return asteroidDao.GetAllAsteroids();
+        }
     }
 
-    public LiveData<List<Asteroid>> getAsteroids() {
-        return asteroids;
+    public static class GetListTask extends AsyncTask<List<String>,Void,Asteroids>{
+        private AsteroidsCallback asteriodsCallback;
+
+        public GetListTask(AsteroidsCallback asteriodsCallback) {
+            this.asteriodsCallback = asteriodsCallback;
+        }
+
+        @Override
+        protected Asteroids doInBackground(List<String>... datums) {
+            try {
+                Asteroids asteroids = AsteroidParser.ParseAsteroids(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/feed?start_date="+ datums[0].get(0)+"&end_date="+datums[0].get(datums[0].size() - 1) +"&api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"), datums[0]);
+                return asteroids;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Asteroids asteroids) {
+            super.onPostExecute(asteroids);
+            try {
+                asteriodsCallback.onTaskCompleted(asteroids);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static class GetTask extends AsyncTask<String,Void,Asteroid>{
+        private AsteroidCallback asteroidCallback;
+
+        public GetTask(AsteroidCallback asteroidCallback) {
+            this.asteroidCallback = asteroidCallback;
+        }
+
+        @Override
+        protected Asteroid doInBackground(String... strings) {
+            try {
+                return AsteroidParser.ParseSingleAsteroid(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/neo/" + strings[0] + "?api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Asteroid asteroid) {
+            super.onPostExecute(asteroid);
+            try {
+                asteroidCallback.onTaskCompleted(asteroid);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static class InsertTask extends AsyncTask<Asteroid, Void, Void> {
@@ -61,6 +143,24 @@ public class AsteroidRepo {
         @Override
         protected Void doInBackground(Asteroid... asteroids) {
             asteroidDao.Insert(asteroids[0]);
+            asteroidDao.DeleteCloseApproachData(asteroids[0].getId());
+            asteroidDao.Insert(asteroids[0].getCloseApproachData());
+            return null;
+        }
+    }
+
+    public static class UpdateTask extends AsyncTask<Asteroid, Void, Void> {
+        private AsteroidDao asteroidDao;
+
+        public UpdateTask(AsteroidDao asteroidDao) {
+            this.asteroidDao = asteroidDao;
+        }
+
+        @Override
+        protected Void doInBackground(Asteroid... asteroids) {
+            asteroidDao.Update(asteroids[0]);
+            asteroidDao.DeleteCloseApproachData(asteroids[0].getId());
+            asteroidDao.Insert(asteroids[0].getCloseApproachData());
             return null;
         }
     }
@@ -78,156 +178,4 @@ public class AsteroidRepo {
             return null;
         }
     }
-
-    public static class Task extends AsyncTask<List<Date>, Void, Asteroids> {
-        private AsteroidsCallback asteroidsCallback;
-        private Context context;
-        private AsteroidDao asteroidDao;
-
-        @Override
-        protected Asteroids doInBackground(List<Date>... dates) {
-            boolean connected = Helper.isConnected(context);
-            Asteroids result = new Asteroids();
-            List<Asteroid> asteroidList = null;
-            List<String>datums = new Vector<>();
-            for(Date date : dates[0]){
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                datums.add(simpleDateFormat.format(date));
-            }
-            if (connected) {
-                Asteroids asteroids;
-                try {
-                    asteroids = AsteroidParser.ParseAsteroids(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/feed?start_date="+ datums.get(0)+"&end_date="+datums.get(datums.size() - 1) +"&api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"), datums);
-                    if(asteroids == null){
-                        asteroidList = new Vector<>();
-                        result.setNearEarthObjects(asteroidList);
-                        return result;
-                    }
-                    insertAsteroids(asteroidDao,asteroids);
-                    return asteroids;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                asteroidList = asteroidDao.GetAllAsteroids();
-                if (!asteroidList.isEmpty()) {
-                    for (Asteroid asteroid : asteroidList) {
-                        asteroid.setCloseApproachData(asteroidDao.GetCloseApproachData(asteroid.getId()));
-                    }
-                }
-                result.setNearEarthObjects(asteroidList);
-            }
-            return result;
-        }
-
-        public Task(AsteroidsCallback asteroidsCallback, Context context) {
-            this.asteroidsCallback = asteroidsCallback;
-            this.context = context;
-            AsteroidRoomDatabase roomDatabase = AsteroidRoomDatabase.getDatabase(context);
-            asteroidDao = roomDatabase.asteroidDao();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Asteroids result) {
-            super.onPostExecute(result);
-            try {
-                asteroidsCallback.onTaskCompleted(result);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static class DetailTask extends AsyncTask<String, Void, Asteroid> {
-        private AsteroidCallback asteroidsCallback;
-        private Context context;
-        private AsteroidDao asteroidDao;
-
-        @Override
-        protected Asteroid doInBackground(String... strings) {
-            boolean connected = Helper.isConnected(context);
-            Asteroid result = null;
-            if (connected) {
-                try {
-                    Asteroid asteroid;
-                    asteroid = AsteroidParser.ParseSingleAsteroid(DataSingleton.getInstance().downloadPlainText("https://api.nasa.gov/neo/rest/v1/neo/" + strings[0] + "?api_key=16Y4RrkQMXVR6yfSVeiaejNKkIq3pK2o7dgRrz1c"));
-                    if(asteroid == null){
-                        asteroid = new Asteroid();
-                        asteroid.setCloseApproachData(new Vector<CloseApproachDatum>());
-                        return asteroid;
-                    }
-                    insertAsteroid(asteroidDao,asteroid);
-                    return asteroid;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                result = asteroidDao.GetAsteroid(strings[0]);
-                List<CloseApproachDatum> closeApproachData = asteroidDao.GetCloseApproachData(strings[0]);
-                result.setCloseApproachData(closeApproachData);
-            }
-            return result;
-        }
-
-        public DetailTask(AsteroidCallback asteroidsCallback, Context context) {
-            this.asteroidsCallback = asteroidsCallback;
-            this.context = context;
-            AsteroidRoomDatabase roomDatabase = AsteroidRoomDatabase.getDatabase(context);
-            asteroidDao = roomDatabase.asteroidDao();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Asteroid result) {
-            super.onPostExecute(result);
-            try {
-                asteroidsCallback.onTaskCompleted(result);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void insertAsteroids(AsteroidDao asteroidDao,Asteroids... asteroids) {
-        for (Asteroid asteroid : asteroids[0].getNearEarthObjects()) {
-            List<CloseApproachDatum> closeApproachDatums = new Vector<>();
-            for (CloseApproachDatum close : asteroid.getCloseApproachData()) {
-                close.setAsteroid_id(asteroid.getId());
-                closeApproachDatums.add(close);
-            }
-            if (asteroidDao.GetAsteroid(asteroid.getId()) == null) {
-                asteroidDao.Insert(asteroid);
-                asteroidDao.Insert(closeApproachDatums);
-            } else {
-                asteroidDao.Update(asteroid);
-                asteroidDao.DeleteCloseApproachData(asteroid.getId());
-                asteroidDao.Insert(closeApproachDatums);
-            }
-        }
-    }
-
-    public static void insertAsteroid(AsteroidDao asteroidDao,Asteroid asteroid) {
-            List<CloseApproachDatum> closeApproachDatums = new Vector<>();
-            for (CloseApproachDatum close : asteroid.getCloseApproachData()) {
-                close.setAsteroid_id(asteroid.getId());
-                closeApproachDatums.add(close);
-            }
-            if (asteroidDao.GetAsteroid(asteroid.getId()) == null) {
-                asteroidDao.Insert(asteroid);
-                asteroidDao.Insert(closeApproachDatums);
-            } else {
-                asteroidDao.Update(asteroid);
-                asteroidDao.DeleteCloseApproachData(asteroid.getId());
-                asteroidDao.Insert(closeApproachDatums);
-            }
-        }
 }

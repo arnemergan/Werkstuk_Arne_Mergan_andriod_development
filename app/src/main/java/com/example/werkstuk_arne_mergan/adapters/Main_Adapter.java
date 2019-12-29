@@ -1,31 +1,41 @@
 package com.example.werkstuk_arne_mergan.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
+import com.example.werkstuk_arne_mergan.models.Follow;
+import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
 
 import java.util.List;
+import java.util.Vector;
 
 public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>{
     private Context context;
     private List<Asteroid> asteroids;
     private OnItemClickListener listener;
-    private Boolean favorite = true;
+    private Boolean favorite = false;
+    private Fragment recycler;
 
-    public Main_Adapter(Context context, List<Asteroid> asteroids, OnItemClickListener listener) {
+    public Main_Adapter(Context context, OnItemClickListener listener,Fragment recycler) {
         this.context = context;
-        this.asteroids = asteroids;
         this.listener = listener;
+        this.recycler = recycler;
+        asteroids = new Vector<>();
     }
 
     public List<Asteroid> getAsteroids() {
@@ -34,6 +44,10 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
 
     public void setAsteroids(List<Asteroid> asteroids) {
         this.asteroids = asteroids;
+    }
+
+    public void clearAsteroids(){
+        asteroids.clear();
     }
 
     @NonNull
@@ -64,32 +78,65 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
             }else{
                 holder.view.setBackgroundResource(R.color.odd_list);
             }
-            setupOnclickFav(holder.view);
+            setupOnclickFav(holder,asteroid.getId());
         }else{
             holder.tv_name.setText(R.string.nodata);
         }
     }
 
-    public void setupOnclickFav(View view){
-        final ImageView image = view.findViewById(R.id.fav_main);
-        image.setOnClickListener(new View.OnClickListener() {
+    public void setupOnclickFav(final ViewHolder holder,final String id){
+        final ImageView image = holder.view.findViewById(R.id.fav_main);
+        final LinearLayout lin = holder.view.findViewById(R.id.fav_lin_main);
+        final FollowViewModel followViewModel = new FollowViewModel(context);
+        followViewModel.getFollow(id).observe( recycler,new Observer<Follow>() {
             @Override
-            public void onClick(View view) {
-                if(favorite){
+            public void onChanged(Follow follow) {
+                if(follow != null){
                     image.setImageResource(R.mipmap.ic_fav);
-                    favorite = false;
+                    favorite = true;
                 }else{
                     image.setImageResource(R.mipmap.ic_nofav);
-                    favorite = true;
+                    favorite = false;
                 }
             }
         });
+        lin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!favorite){
+                    image.setImageResource(R.mipmap.ic_fav);
+                    Follow follow = new Follow();
+                    follow.setName(holder.tv_name.getText().toString());
+                    follow.setId(id);
+                    followViewModel.insert(follow);
+                    favorite = true;
+                }else{
+                    image.setImageResource(R.mipmap.ic_nofav);
+                    Follow follow = new Follow();
+                    follow.setId(id);
+                    followViewModel.delete(follow);
+                    favorite = false;
+                }
+            }
+        });
+    }
 
+    public String getDate(int position){
+        String date = "";
+        try {
+           date = asteroids.get(position).getCloseApproachData().get(0).getCloseApproachDate();
+        }catch (ArrayIndexOutOfBoundsException ex){
+            ex.printStackTrace();
+        }
+        return date;
     }
 
 
     @Override
     public int getItemCount() {
+        if(asteroids == null){
+            return 0;
+        }
         return asteroids.size();
     }
 

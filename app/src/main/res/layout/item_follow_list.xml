@@ -16,7 +16,7 @@
             android:layout_marginLeft="16dp"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="asteriod name"
@@ -28,17 +28,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
+                android:baselineAligned="true"
+                android:layout_gravity="right"
                 android:orientation="vertical">
                 <ImageView
                     android:id="@+id/fav_follow"
                     android:layout_width="60dp"
+                    android:layout_gravity="center"
                     android:layout_height="60dp"
                     android:src="@mipmap/ic_nofav" />
                 <TextView
-                    android:layout_width="60dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/fav_follow_text"
-                    android:text="@string/follow"
+                    android:text="@string/unfollow"
                     android:textAlignment="center"
                     android:textColor="@color/toolbar_main"
                     android:textStyle="bold"

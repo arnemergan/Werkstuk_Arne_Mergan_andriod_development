@@ -18,6 +18,9 @@ import com.example.werkstuk_arne_mergan.models.RelativeVelocity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -56,6 +59,15 @@ public abstract class AsteroidParser {
         JSONObject obj = new JSONObject(result);
         asteroid = ParseAsteroid(obj);
         return asteroid;
+    }
+
+    public static List<String> ParseDates(List<Date>dates){
+        List<String>datums = new Vector<>();
+        for(Date date : dates){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            datums.add(simpleDateFormat.format(date));
+        }
+        return datums;
     }
 
     public static Asteroid ParseAsteroid(JSONObject obj) throws JSONException{

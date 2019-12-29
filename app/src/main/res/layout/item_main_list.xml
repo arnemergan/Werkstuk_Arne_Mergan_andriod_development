@@ -14,9 +14,10 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_gravity="start"
         android:orientation="vertical"
         android:layout_weight="10">
         <TextView
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="asteriod name"
-            android:textSize="21sp"
+            android:textSize="19sp"
             android:id="@+id/item_asteroid_name"
             android:paddingBottom="4dp"/>
         <LinearLayout
@@ -41,9 +42,11 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/fav_lin_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="4"
+        android:layout_gravity="end"
         android:orientation="vertical">
         <ImageView
             android:id="@+id/fav_main"
@@ -56,7 +59,7 @@
             android:id="@+id/fav_main_text"
             android:text="@string/follow"
             android:textAlignment="center"
-            android:textColor="@color/toolbar_text"
+            android:textColor="@color/toolbar_main"
             android:textStyle="bold"
             >
 

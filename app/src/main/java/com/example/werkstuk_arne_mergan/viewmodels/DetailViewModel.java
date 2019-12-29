@@ -10,25 +10,15 @@ import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
 
 public class DetailViewModel {
-    private MutableLiveData<Asteroid> asteroid = new MutableLiveData<>();
-    private Context context;
+    private LiveData<Asteroid> asteroid;
+    private AsteroidRepo asteroidRepo;
 
     public DetailViewModel(Context context) {
-        this.context = context;
+        asteroidRepo = new AsteroidRepo(context);
     }
 
     public LiveData<Asteroid> GetAsteroid(String id){
-        LoadAsteroid(id);
+        asteroid = asteroidRepo.getAsteroid(id);
         return asteroid;
-    }
-
-    private void LoadAsteroid(String id) {
-        AsteroidRepo.DetailTask detailTask = new AsteroidRepo.DetailTask(new AsteroidCallback() {
-            @Override
-            public void onTaskCompleted(Asteroid result) {
-                asteroid.setValue(result);
-            }
-        }, context);
-        detailTask.execute(id);
     }
 }

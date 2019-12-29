@@ -1,17 +1,24 @@
 package com.example.werkstuk_arne_mergan.adapters;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
+import com.example.werkstuk_arne_mergan.models.Follow;
+import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -79,11 +86,19 @@ public class Detail_Adapter extends RecyclerView.Adapter< Detail_Adapter.ViewHol
             }
         }else{
             holder.detail_date.setText(R.string.nodata);
+            holder.detail_body.setVisibility(View.INVISIBLE);
+            holder.detail_miss.setVisibility(View.INVISIBLE);
+            holder.detail_velo.setVisibility(View.INVISIBLE);
+            holder.detail_days.setVisibility(View.INVISIBLE);
+
         }
     }
 
     @Override
     public int getItemCount() {
+        if(closeApproachData == null){
+            return 0;
+        }
         return closeApproachData.size();
     }
 

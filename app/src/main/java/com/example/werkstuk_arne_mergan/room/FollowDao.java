@@ -23,5 +23,5 @@ public interface FollowDao {
     LiveData<List<Follow>>GetAllFollows();
 
     @Query("SELECT * FROM follow WHERE id = :id")
-    Asteroid GetFollow(String id);
+    Follow GetFollow(String id);
 }
