@@ -9,12 +9,10 @@ import com.example.werkstuk_arne_mergan.repositories.FollowRepo;
 import java.util.List;
 
 public class FollowViewModel {
-    private LiveData<List<Follow>> follows;
     private FollowRepo followRepo;
 
     public FollowViewModel(Context context) {
         followRepo = new FollowRepo(context);
-        follows = followRepo.getFollows();
 }
 
     public LiveData<Follow> getFollow(String id){
@@ -30,6 +28,6 @@ public class FollowViewModel {
     }
 
     public LiveData<List<Follow>> getFollows() {
-        return follows;
+        return followRepo.getFollows();
     }
 }

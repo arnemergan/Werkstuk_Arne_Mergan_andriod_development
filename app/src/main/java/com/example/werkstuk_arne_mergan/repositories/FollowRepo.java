@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.werkstuk_arne_mergan.interfaces.FollowCallback;
+import com.example.werkstuk_arne_mergan.interfaces.FollowsCallback;
 import com.example.werkstuk_arne_mergan.models.Follow;
 import com.example.werkstuk_arne_mergan.room.AsteroidRoomDatabase;
 import com.example.werkstuk_arne_mergan.room.FollowDao;
@@ -14,20 +15,18 @@ import java.util.List;
 
 public class FollowRepo {
     private FollowDao followDao;
-    private LiveData<List<Follow>> follows;
     private MutableLiveData<Follow> followMutableLiveData = new MutableLiveData<>();
 
     public FollowRepo(Context context) {
         AsteroidRoomDatabase roomDatabase = AsteroidRoomDatabase.getDatabase(context);
         followDao = roomDatabase.followDao();
-        follows = followDao.GetAllFollows();
     }
 
     public LiveData<Follow> get(String id){
         new GetTask(followDao, new FollowCallback() {
             @Override
             public void onTaskCompleted(Follow follow) {
-                followMutableLiveData.setValue(follow);
+                followMutableLiveData.postValue(follow);
             }
         }).execute(id);
         return followMutableLiveData;
@@ -42,7 +41,7 @@ public class FollowRepo {
     }
 
     public LiveData<List<Follow>> getFollows(){
-        return follows;
+        return followDao.GetAllFollows();
     }
 
     public static class GetTask extends AsyncTask<String, Void, Follow> {

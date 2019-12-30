@@ -47,24 +47,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        fragmentManager = getSupportFragmentManager();
-        if (findViewById(R.id.fragment_detail) != null) {
-            twopane = true;
-        }else{
-            viewPager.setAdapter(sectionsPagerAdapter);
-            TabLayout tabs = findViewById(R.id.tabs);
-            tabs.setupWithViewPager(viewPager);
-            twopane = false;
+            SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+            ViewPager viewPager = findViewById(R.id.view_pager);
+            if(viewPager !=null){
+                viewPager.setOffscreenPageLimit(3);
+            }
+            fragmentManager = getSupportFragmentManager();
+            if (findViewById(R.id.fragment_detail) != null) {
+                twopane = true;
+            }else{
+                viewPager.setAdapter(sectionsPagerAdapter);
+                TabLayout tabs = findViewById(R.id.tabs);
+                tabs.setupWithViewPager(viewPager);
+                twopane = false;
+            }
+            if(twopane){
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_list, new MainRecyclerViewFragment(fragmentManager,twopane))
+                        .commit();
+            }
+            Toolbar mlt = findViewById(R.id.main_bar);
+            setSupportActionBar(mlt);
+        if(!Helper.isConnected(this)){
+            Toast toast = Toast.makeText(this,R.string.chechinternet,Toast.LENGTH_LONG);
+            toast.show();
         }
-        if(twopane){
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_list, new MainRecyclerViewFragment(fragmentManager,twopane))
-                    .commit();
-        }
-        Toolbar mlt = findViewById(R.id.main_bar);
-        setSupportActionBar(mlt);
     }
 
     @Override
@@ -81,9 +88,6 @@ public class MainActivity extends AppCompatActivity {
             Intent settings_intent = new Intent(this, SettingsActivity.class);
             startActivity(settings_intent);
             return true;
-        }else if(item.getItemId() == R.id.action_favorites){
-            Intent follow_intent = new Intent(this, FollowActivity.class);
-            startActivity(follow_intent);
         }
         return super.onOptionsItemSelected(item);
     }

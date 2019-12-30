@@ -38,9 +38,6 @@ public class DetailActivity extends AppCompatActivity {
             Intent settings_intent = new Intent(this, SettingsActivity.class);
             startActivity(settings_intent);
             return true;
-        }else if(item.getItemId() == R.id.action_favorites){
-            Intent follow_intent = new Intent(this, FollowActivity.class);
-            startActivity(follow_intent);
         }
         return super.onOptionsItemSelected(item);
     }

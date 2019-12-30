@@ -3,7 +3,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -18,19 +17,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.werkstuk_arne_mergan.adapters.Main_Adapter;
 import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.activities.DetailActivity;
 import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
-import com.example.werkstuk_arne_mergan.ui.main.PageViewModel;
+import com.example.werkstuk_arne_mergan.services.Helper;
 import com.example.werkstuk_arne_mergan.viewmodels.MainViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 import java.util.Vector;
 
 
@@ -39,7 +40,6 @@ import java.util.Vector;
  */
 public class MainRecyclerViewFragment extends Fragment implements OnItemClickListener {
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
     private Main_Adapter main_adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MainViewModel mainViewModel;
@@ -73,16 +73,20 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         View view = inflater.inflate(R.layout.fragment_main_list_view, container, false);
         textdate = view.findViewById(R.id.date_recycler);
         setupDates();
-        mainViewModel = new MainViewModel(getContext(),dates);
         main_adapter = new Main_Adapter(getContext(),this,this);
         recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler_view);
         linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(main_adapter);
-        progressBar = view.findViewById(R.id.main_recycler_progress);
         swipeRefreshLayout = view.findViewById(R.id.main_recycler_refresh);
-        mainViewModel = new MainViewModel(this.getContext(),dates);
-        setupRecyclerView();
+        mainViewModel = new MainViewModel(this.getActivity().getApplication(),dates);
+        mainViewModel.GetAsteroidList().observe(this, new Observer<List<Asteroid>>(){
+            @Override
+            public void onChanged(List<Asteroid> asteroids) {
+                main_adapter.setAsteroids(asteroids);
+                main_adapter.notifyDataSetChanged();
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,18 +109,34 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         return view;
     }
 
-    public void setupRecyclerView(){
-        main_adapter.clearAsteroids();
-        main_adapter.notifyDataSetChanged();
-        progressBar.setVisibility(View.VISIBLE);
-        mainViewModel.GetAsteroidList(dates).observe(this, new Observer<List<Asteroid>>(){
+    @Override
+    public void onStart() {
+        observe();
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        observe();
+        super.onResume();
+    }
+
+    public void observe(){
+        mainViewModel.GetAsteroidList().observe(this, new Observer<List<Asteroid>>(){
             @Override
             public void onChanged(List<Asteroid> asteroids) {
                 main_adapter.setAsteroids(asteroids);
                 main_adapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    public void setupRecyclerView(){
+        observe();
+        if(!Helper.isConnected(getContext())){
+            Toast toast = Toast.makeText(getContext(),R.string.chechinternet,Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     public void setupDates(){
@@ -126,7 +146,7 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
         if(recent){
             dates.add(date);
             textdate.setText(simpleDateFormatEng.format(date));
-            for (int i = -1;i>-7;i--){
+            for (int i = -1;i>-5;i--){
                 calendar.setTime(date);
                 calendar.add(Calendar.DAY_OF_YEAR, i);
                 dates.add(calendar.getTime());

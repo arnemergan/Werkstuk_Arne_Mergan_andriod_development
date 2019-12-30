@@ -17,6 +17,7 @@ import com.example.werkstuk_arne_mergan.interfaces.AsteroidsCallback;
 import org.json.JSONException;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 public class AsteroidRepo {
 
@@ -42,6 +43,10 @@ public class AsteroidRepo {
                 public void onTaskCompleted(Asteroid result) throws JSONException {
                     if(result != null){
                         new InsertTask(asteroidDao).execute(result);
+                        if(asteroidMutableLiveData == null) {
+                            asteroidMutableLiveData = new MutableLiveData<>();
+                        }
+                        asteroidMutableLiveData.setValue(null);
                         asteroidMutableLiveData.postValue(result);
                     }
                 }
@@ -54,6 +59,7 @@ public class AsteroidRepo {
 
     public LiveData<List<Asteroid>> getAsteroids(List<Date>dates) {
         List<String> datums = AsteroidParser.ParseDates(dates);
+        LiveData<List<Asteroid>>liveData = new MutableLiveData<>();
         if(getConnection()) {
             //noinspection unchecked
             new GetListTask(new AsteroidsCallback() {
@@ -65,15 +71,18 @@ public class AsteroidRepo {
                         for (Asteroid asteroid : result.getNearEarthObjects()) {
                             new InsertTask(asteroidDao).execute(asteroid);
                         }
+                        if(asteroidsMutableLiveData == null) {
+                            asteroidsMutableLiveData = new MutableLiveData<>();
+                        }
+                        asteroidsMutableLiveData.setValue(new Vector<Asteroid>());
                         asteroidsMutableLiveData.postValue(result.getNearEarthObjects());
                     }
                 }
             }
             }).execute(datums);
             return asteroidsMutableLiveData;
-        }else{
-            return asteroidDao.GetAllAsteroids();
         }
+        return liveData;
     }
 
     public static class GetListTask extends AsyncTask<List<String>,Void,Asteroids>{

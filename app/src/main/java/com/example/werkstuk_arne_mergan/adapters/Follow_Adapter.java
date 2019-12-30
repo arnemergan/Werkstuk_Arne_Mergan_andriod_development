@@ -17,6 +17,7 @@ import com.example.werkstuk_arne_mergan.models.Follow;
 import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
 
 import java.util.List;
+import java.util.Vector;
 
 public class Follow_Adapter extends RecyclerView.Adapter<Follow_Adapter.ViewHolder> {
     private Context context;
@@ -26,6 +27,11 @@ public class Follow_Adapter extends RecyclerView.Adapter<Follow_Adapter.ViewHold
     public Follow_Adapter(FollowViewModel followViewModel,Context context) {
         this.followViewModel = followViewModel;
         this.context = context;
+        follows = new Vector<>();
+    }
+
+    public void clear(){
+        follows.clear();
     }
 
     @NonNull
@@ -44,6 +50,7 @@ public class Follow_Adapter extends RecyclerView.Adapter<Follow_Adapter.ViewHold
             @Override
             public void onClick(View view) {
                 followViewModel.delete(follow);
+                holder.itemView.setVisibility(View.INVISIBLE);
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {

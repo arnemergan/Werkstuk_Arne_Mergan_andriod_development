@@ -36,6 +36,7 @@ import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
 import com.example.werkstuk_arne_mergan.models.Follow;
 import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
 import com.example.werkstuk_arne_mergan.services.AsteroidParser;
+import com.example.werkstuk_arne_mergan.services.Helper;
 import com.example.werkstuk_arne_mergan.viewmodels.DetailViewModel;
 import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
 
@@ -83,6 +84,10 @@ public class MainDetailViewFragment extends Fragment {
         detailViewModel = new DetailViewModel(this.getContext());
         progressBar.setVisibility(View.VISIBLE);
         LoadAsteroid(id);
+        if(!Helper.isConnected(getContext())){
+            Toast toast = Toast.makeText(getContext(),R.string.chechinternet,Toast.LENGTH_LONG);
+            toast.show();
+        }
         return v;
     }
 
