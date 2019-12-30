@@ -129,7 +129,7 @@ public class MainDetailViewFragment extends Fragment {
     public void setupOnclickFav(final View view){
         final Button btn = view.findViewById(R.id.btn_follow);
         final FollowViewModel followViewModel = new FollowViewModel(this.getContext());
-        followViewModel.getFollow(asteroid.getId()).observe( this,new Observer<Follow>() {
+        followViewModel.getFollow(id).observe( this,new Observer<Follow>() {
             @Override
             public void onChanged(Follow follow) {
                 if(follow != null){
