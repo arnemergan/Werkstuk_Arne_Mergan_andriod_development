@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Werkstuk_Arne_Mergan</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">NEO</string>
     <string name="menu_settings">instellingen</string>
     <string name="search">zoek</string>
     <string name="title_activity_settings">Instellingen</string>
@@ -21,10 +21,16 @@
     <string name="chechinternet">Controleer internetverbinding</string>
     <string name="select_date">selecteer datum</string>
     <string name="days_left">dagen</string>
+    <string name="days_ago">dagen geleden</string>
     <string name="follow_this_asteroid">Volg mij</string>
     <string name="volgend">volgend</string>
     <string name="follow">Volgen</string>
     <string name="unfollow">Niet meer volgen</string>
     <string name="follow_list">Volgend</string>
+    <string name="binnen">binnen</string>
 
+    <string name="title_activity_tabbed">Tabbed</string>
+    <string name="tab_text_1">Recent</string>
+    <string name="tab_text_2">Aankomend</string>
+    <string name="tab_text_3">Volgend</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.example.werkstuk_arne_mergan.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -26,7 +28,11 @@ import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.repositories.AsteroidRepo;
 import com.example.werkstuk_arne_mergan.services.Helper;
+import com.example.werkstuk_arne_mergan.services.LocaleHelper;
+import com.example.werkstuk_arne_mergan.ui.main.SectionsPagerAdapter;
 import com.example.werkstuk_arne_mergan.viewmodels.MainViewModel;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -41,16 +47,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        ViewPager viewPager = findViewById(R.id.view_pager);
         fragmentManager = getSupportFragmentManager();
         if (findViewById(R.id.fragment_detail) != null) {
             twopane = true;
+        }else{
+            viewPager.setAdapter(sectionsPagerAdapter);
+            TabLayout tabs = findViewById(R.id.tabs);
+            tabs.setupWithViewPager(viewPager);
+            twopane = false;
         }
         if(twopane){
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_list, new MainRecyclerViewFragment(fragmentManager,twopane))
                     .commit();
         }
-        androidx.appcompat.widget.Toolbar mlt = findViewById(R.id.main_bar);
+        Toolbar mlt = findViewById(R.id.main_bar);
         setSupportActionBar(mlt);
     }
 

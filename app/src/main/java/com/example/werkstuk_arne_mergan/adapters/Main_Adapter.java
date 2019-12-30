@@ -21,6 +21,9 @@ import com.example.werkstuk_arne_mergan.models.Asteroid;
 import com.example.werkstuk_arne_mergan.models.Follow;
 import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -65,12 +68,7 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
                 holder.bind(asteroid, listener);
                 holder.tv_name.setText(asteroid.getName());
                 if(asteroid.getCloseApproachData() != null){
-                    String date = asteroid.getCloseApproachData().get(0).getCloseApproachDateFull();
-                    if (date == null || date == "") {
-                        holder.tv_full_date.setText(asteroid.getCloseApproachData().get(0).getCloseApproachDate());
-                    } else {
-                        holder.tv_full_date.setText(date);
-                    }
+                    holder.tv_full_date.setText(getDate(position));
                 }
             }
             if(position % 2 != 0){
@@ -88,15 +86,18 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
         final ImageView image = holder.view.findViewById(R.id.fav_main);
         final LinearLayout lin = holder.view.findViewById(R.id.fav_lin_main);
         final FollowViewModel followViewModel = new FollowViewModel(context);
+        final TextView follow_text = holder.view.findViewById(R.id.fav_main_text);
         followViewModel.getFollow(id).observe( recycler,new Observer<Follow>() {
             @Override
             public void onChanged(Follow follow) {
                 if(follow != null){
                     image.setImageResource(R.mipmap.ic_fav);
                     favorite = true;
+                    setupFollowText(follow_text);
                 }else{
                     image.setImageResource(R.mipmap.ic_nofav);
                     favorite = false;
+                    setupFollowText(follow_text);
                 }
             }
         });
@@ -110,23 +111,37 @@ public class Main_Adapter extends RecyclerView.Adapter< Main_Adapter.ViewHolder>
                     follow.setId(id);
                     followViewModel.insert(follow);
                     favorite = true;
+                    setupFollowText(follow_text);
                 }else{
                     image.setImageResource(R.mipmap.ic_nofav);
                     Follow follow = new Follow();
                     follow.setId(id);
                     followViewModel.delete(follow);
                     favorite = false;
+                    setupFollowText(follow_text);
                 }
             }
         });
     }
 
+    public void setupFollowText(TextView textView){
+        if(favorite){
+            textView.setText(R.string.unfollow);
+        }else{
+            textView.setText(R.string.follow);
+        }
+    }
+
+
     public String getDate(int position){
         String date = "";
         try {
-           date = asteroids.get(position).getCloseApproachData().get(0).getCloseApproachDate();
-        }catch (ArrayIndexOutOfBoundsException ex){
-            ex.printStackTrace();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date1 = simpleDateFormat.parse(asteroids.get(position).getCloseApproachData().get(0).getCloseApproachDate());
+            String date2 = new SimpleDateFormat("dd-MM-yyyy").format(date1);
+            date = date2;
+        }catch (Exception exception){
+            exception.printStackTrace();
         }
         return date;
     }

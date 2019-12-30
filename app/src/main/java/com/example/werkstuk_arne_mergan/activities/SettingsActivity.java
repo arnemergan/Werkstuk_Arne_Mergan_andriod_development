@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.ListPreference;
@@ -12,9 +14,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.werkstuk_arne_mergan.R;
-
-import java.util.Locale;
-
+import com.example.werkstuk_arne_mergan.services.LocaleHelper;
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -39,21 +39,14 @@ public class SettingsActivity extends AppCompatActivity {
             listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Resources resources = getResources();
-                    DisplayMetrics dm = resources.getDisplayMetrics();
-                    Configuration config = resources.getConfiguration();
                     String lang = newValue.toString();
+                    Log.e("ezrrtz",lang);
                     if(lang == "Dutch"){
                         lang = "nl";
                     }else{
                         lang = "en";
                     }
-                    if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1){
-                        config.setLocale(new Locale(lang.toLowerCase()));
-                    } else {
-                        config.locale = new Locale(lang.toLowerCase());
-                    }
-                    resources.updateConfiguration(config, dm);
+                    LocaleHelper.setLocale(getContext(),lang);
                     return true;
                 }
             });

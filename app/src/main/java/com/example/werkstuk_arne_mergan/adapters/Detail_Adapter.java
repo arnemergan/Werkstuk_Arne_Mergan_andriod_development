@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.models.CloseApproachDatum;
 import com.example.werkstuk_arne_mergan.models.Follow;
+import com.example.werkstuk_arne_mergan.services.LocaleHelper;
 import com.example.werkstuk_arne_mergan.viewmodels.FollowViewModel;
 
 import java.text.DecimalFormat;
@@ -51,7 +52,6 @@ public class Detail_Adapter extends RecyclerView.Adapter< Detail_Adapter.ViewHol
     public void onBindViewHolder(Detail_Adapter.ViewHolder holder, int position) {
         if(closeApproachData.size() > 1) {
             CloseApproachDatum closeApproachDatum = closeApproachData.get(position);
-            holder.detail_date.setText(closeApproachDatum.getCloseApproachDate());
             holder.detail_body.setText(closeApproachDatum.getOrbitingBody());
             Double missdistance = Double.parseDouble(closeApproachDatum.getMissDistance().getKilometers());
             Double velocity = Double.parseDouble(closeApproachDatum.getRelativeVelocity().getKilometersPerHour());
@@ -64,7 +64,17 @@ public class Detail_Adapter extends RecyclerView.Adapter< Detail_Adapter.ViewHol
                 Date date1 = simpleDateFormat.parse(closeApproachDatum.getCloseApproachDate());
                 long diff = date1.getTime() - date.getTime();
                 long days = diff / (1000 * 60 * 60 * 24);
-                holder.detail_days.setText(days + " " + context.getString(R.string.days_left));
+                if(days < 0){
+                    holder.detail_days.setText(Math.abs(days) + " " + context.getString(R.string.days_ago));
+                }else{
+                    if(LocaleHelper.getLanguage(context).equals("en")) {
+                        holder.detail_days.setText(days + " " + context.getString(R.string.days_left));
+                    }else{
+                        holder.detail_days.setText(context.getString(R.string.binnen)+ days + " " + context.getString(R.string.days_left));
+                    }
+                }
+                String date2 = new SimpleDateFormat("dd-MM-yyyy").format(date1);
+                holder.detail_date.setText(date2);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

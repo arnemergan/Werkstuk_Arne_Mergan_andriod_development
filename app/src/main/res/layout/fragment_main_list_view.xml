@@ -27,7 +27,6 @@
         android:textColor="@color/toolbar_main"
         android:textStyle="bold"
         android:textAlignment="center">
-
     </TextView>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/main_recycler_refresh"

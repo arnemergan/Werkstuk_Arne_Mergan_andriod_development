@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Werkstuk_Arne_Mergan</string>
+    <string name="app_name">NEO</string>
     <string name="menu_settings">settings</string>
     <string name="search">search</string>
     <string name="title_activity_settings">Settings</string>
@@ -20,11 +20,17 @@
     <string name="chechinternet">Please check internet connection</string>
     <string name="select_date">select date</string>
     <string name="days_left">days left</string>
+    <string name="days_ago">days ago</string>
     <string name="follow_this_asteroid">Follow me</string>
     <string name="volgend">Following</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="follow_list">Followed</string>
+    <string name="binnen">x</string>
+    <string name="title_activity_tabbed">Tabbed</string>
+    <string name="tab_text_1">Recent</string>
+    <string name="tab_text_2">Upcoming</string>
+    <string name="tab_text_3">Followed</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

@@ -3,9 +3,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -22,6 +24,7 @@ import com.example.werkstuk_arne_mergan.R;
 import com.example.werkstuk_arne_mergan.activities.DetailActivity;
 import com.example.werkstuk_arne_mergan.interfaces.OnItemClickListener;
 import com.example.werkstuk_arne_mergan.models.Asteroid;
+import com.example.werkstuk_arne_mergan.ui.main.PageViewModel;
 import com.example.werkstuk_arne_mergan.viewmodels.MainViewModel;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +49,7 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
     private LinearLayoutManager linearLayoutManager;
     private boolean twopane = false;
     private SimpleDateFormat simpleDateFormatEng = new SimpleDateFormat("yyyy-MM-dd");
+    private Boolean recent = false;
 
     public MainRecyclerViewFragment() {
     }
@@ -53,6 +57,15 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
     public MainRecyclerViewFragment(FragmentManager fragmentManager,Boolean twopane) {
         this.fragmentManager = fragmentManager;
         this.twopane = twopane;
+    }
+
+    public MainRecyclerViewFragment(Boolean recent){
+        this.recent = recent;
+    }
+
+    public static MainRecyclerViewFragment newInstance(boolean recent){
+        MainRecyclerViewFragment fragment = new MainRecyclerViewFragment(recent);
+        return fragment;
     }
 
     @Override
@@ -109,12 +122,22 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
     public void setupDates(){
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
-        dates.add(date);
-        textdate.setText(simpleDateFormatEng.format(date));
-        for (int i = -1;i>-7;i--){
-            calendar.setTime(date);
-            calendar.add(Calendar.DAY_OF_YEAR, i);
-            dates.add(calendar.getTime());
+        dates.clear();
+        if(recent){
+            dates.add(date);
+            textdate.setText(simpleDateFormatEng.format(date));
+            for (int i = -1;i>-7;i--){
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_YEAR, i);
+                dates.add(calendar.getTime());
+            }
+        }else{
+            textdate.setText(simpleDateFormatEng.format(date));
+            for (int i = 1;i<7;i++){
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_YEAR, i);
+                dates.add(calendar.getTime());
+            }
         }
     }
 
@@ -136,17 +159,5 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
     public void onDestroy() {
         super.onDestroy();
         twopane = false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupRecyclerView();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        setupRecyclerView();
     }
 }
