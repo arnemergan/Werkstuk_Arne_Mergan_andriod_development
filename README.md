@@ -1,5 +1,5 @@
 # Werkstuk Android Development - Arne Mergan
-Het werkstuk is een Android applicatie die een overzicht biedt van dichtsbijzijnde astroïden bij de aarde.  
+Het werkstuk is een Android applicatie die een overzicht biedt van dichtsbijzijnde astroïden in de buurt van een planeet.  
 Het werkstuk bevat een lijst van de recentste en aankomende astroïden met bij elk een bijhorende detailpagina.  
 De gebruiker kan uit deze lijst kiezen welke astroïden hij/zij wilt volgen.  
 Het bevat ook een instellingen pagina waar de gebruiker de taal kan aanpassen naar engels of nederlands.  
