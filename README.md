@@ -4,8 +4,10 @@ Het werkstuk bevat een lijst van de recentste en aankomende astroïden met bij e
 De gebruiker kan uit deze lijst kiezen welke astroïden hij/zij wilt volgen.  
 Het bevat ook een instellingen pagina waar de gebruiker de taal kan aanpassen naar engels of nederlands.  
 
+Wanneer u navigeert van de hoofdpagina naar de detailpagina wordt er gebruik gemaakt van een transitie.
+
 # Bronnen:
-Modules van het vak Android Development gegeven te Erasmushogeschool Brussel
+Modules van het vak Android Development
 https://antonioleiva.com/swiperefreshlayout/  
 https://www.mkyong.com/java/java-display-double-in-2-decimal-points/  
 https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/  
