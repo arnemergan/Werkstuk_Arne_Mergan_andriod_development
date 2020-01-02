@@ -37,24 +37,23 @@ public class AsteroidRepo {
     }
 
     public LiveData<Asteroid> getAsteroid(String id){
+        LiveData<Asteroid>liveData = new MutableLiveData<>();
         if(getConnection()){
             new GetTask(new AsteroidCallback() {
                 @Override
-                public void onTaskCompleted(Asteroid result) throws JSONException {
+                public void onTaskCompleted(Asteroid result){
                     if(result != null){
-                        new InsertTask(asteroidDao).execute(result);
                         if(asteroidMutableLiveData == null) {
                             asteroidMutableLiveData = new MutableLiveData<>();
                         }
-                        asteroidMutableLiveData.setValue(null);
+                        asteroidMutableLiveData.setValue(result);
                         asteroidMutableLiveData.postValue(result);
                     }
                 }
             }).execute(id);
             return asteroidMutableLiveData;
-        }else{
-            return asteroidDao.GetAsteroid(id);
         }
+        return liveData;
     }
 
     public LiveData<List<Asteroid>> getAsteroids(List<Date>dates) {
@@ -68,9 +67,6 @@ public class AsteroidRepo {
                 public void onTaskCompleted(Asteroids result) {
                     if (result != null) {
                     if (result.getNearEarthObjects() != null) {
-                        for (Asteroid asteroid : result.getNearEarthObjects()) {
-                            new InsertTask(asteroidDao).execute(asteroid);
-                        }
                         if(asteroidsMutableLiveData == null) {
                             asteroidsMutableLiveData = new MutableLiveData<>();
                         }

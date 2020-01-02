@@ -115,7 +115,6 @@ public class MainDetailViewFragment extends Fragment {
         });
     }
 
-    @SuppressLint("ResourceAsColor")
     public void setupBtn(Button btn){
         if(favorite){
             btn.setBackgroundColor(getResources().getColor(R.color.odd_list));

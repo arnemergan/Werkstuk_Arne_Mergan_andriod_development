@@ -1,8 +1,5 @@
 package com.example.werkstuk_arne_mergan;
 import com.example.werkstuk_arne_mergan.repositories.DataSingleton;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
