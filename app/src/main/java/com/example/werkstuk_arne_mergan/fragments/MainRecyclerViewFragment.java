@@ -169,6 +169,7 @@ public class MainRecyclerViewFragment extends Fragment implements OnItemClickLis
             Intent intent = new Intent(this.getActivity(), DetailActivity.class);
             intent.putExtra("asteroid_id", asteroid.getId());
             startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.slide_out,R.anim.slide_out);
         }else {
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_detail, new MainDetailViewFragment(asteroid.getId()))
